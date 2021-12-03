@@ -52,7 +52,7 @@ function update() {
 	currentWindowLocation = nextWindowLocation;
 	
 	let phoneMovement;
-	if(laSensor.activated){
+	if(laSensor?.activated){
 		switch (screen.orientation.angle) {
 			case 0:
 				phoneMovement = {
