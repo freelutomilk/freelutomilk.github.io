@@ -9,8 +9,8 @@ var bodyToWindowSizeRatio = 0.8; //try to be 80% of the windows height or width,
 const boobaDragCoef = 0.90;
 const boobaPullPerPixel = 0.12;
 const boobaPullFromWindow = -0.1;
-const boobaPullFromAccelerationX = 1.2;
-const boobaPullFromAccelerationY = 0.4;
+const boobaPullFromAccelerationX = 0.5;
+const boobaPullFromAccelerationY = 1.2;
 
 let laSensor = null;
 
