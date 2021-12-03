@@ -10,7 +10,7 @@ const boobaDragCoef = 0.90;
 const boobaPullPerPixel = 0.12;
 const boobaPullFromWindow = -0.1;
 const boobaPullFromAccelerationX = 1.2;
-const boobaPullFromAccelerationY = 0.7;
+const boobaPullFromAccelerationY = 0.4;
 
 let laSensor = null;
 
@@ -45,12 +45,49 @@ function update() {
 		y: window.screenY
 	}
 
-	let windowsVelocity = {//Todo: Make a phone version of it
+	let windowsVelocity = {
 		x: nextWindowLocation.x - currentWindowLocation.x,
 		y: nextWindowLocation.y - currentWindowLocation.y
 	}
-	
 	currentWindowLocation = nextWindowLocation;
+	
+	let phoneMovement;
+	if(laSensor.activated){
+		switch (screen.orientation.angle) {
+			case 0:
+				phoneMovement = {
+					x: laSensor.x,
+					y: laSensor.y
+				}
+				break;
+			case 90:
+				phoneMovement = {
+					x: -laSensor.y,
+					y: laSensor.x
+				}
+				break
+			case 180:
+				phoneMovement = {
+					x: -laSensor.x,
+					y: -laSensor.y
+				}
+				break
+			case 270:
+				phoneMovement = {
+					x: laSensor.y,
+					y: -laSensor.x
+				}
+				break
+			default:// How the heck did you get here
+				phoneMovement = {// default to normal orientation because what device do you have to allow non 90 degree rotation
+					x: laSensor.x,
+					y: laSensor.y
+				}
+				break;
+		}
+	} else {
+		phoneMovement = {x: 0, y: 0};
+	}
 	
 	//deal with the position stuff
 	bodyTargetLocation.x = (window.innerWidth - body.naturalWidth * scaling) / 2;
@@ -62,8 +99,8 @@ function update() {
 	};
 	
 	boobaVelocity = {
-		x: boobaVelocity.x * boobaDragCoef + windowsVelocity.x * boobaPullFromWindow + (boobaTargetLocation.x - boobaCurrentLocation.x) * boobaPullPerPixel + (laSensor?.x ?? 0 * boobaPullFromAccelerationX),
-		y: boobaVelocity.y * boobaDragCoef + windowsVelocity.y * boobaPullFromWindow + (boobaTargetLocation.y - boobaCurrentLocation.y) * boobaPullPerPixel + (laSensor?.y ?? 0 * boobaPullFromAccelerationY)
+		x: boobaVelocity.x * boobaDragCoef + windowsVelocity.x * boobaPullFromWindow + (boobaTargetLocation.x - boobaCurrentLocation.x) * boobaPullPerPixel + phoneMovement.x * boobaPullFromAccelerationX,
+		y: boobaVelocity.y * boobaDragCoef + windowsVelocity.y * boobaPullFromWindow + (boobaTargetLocation.y - boobaCurrentLocation.y) * boobaPullPerPixel + phoneMovement.y * boobaPullFromAccelerationY
 	}
 	
 	body.style.left = (body.offsetLeft || bodyTargetLocation.x) + (bodyTargetLocation.x - body.offsetLeft) * 0.2 + "px";
