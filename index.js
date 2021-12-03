@@ -20,6 +20,7 @@ navigator.permissions.query({ name: 'accelerometer' })
     return;
   }
   laSensor = new LinearAccelerationSensor({frequency: 60});
+  laSensor.start();
 });
 
 function update() {
