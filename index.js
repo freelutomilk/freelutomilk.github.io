@@ -9,6 +9,18 @@ var bodyToWindowSizeRatio = 0.8; //try to be 80% of the windows height or width,
 const boobaDragCoef = 0.90;
 const boobaPullPerPixel = 0.12;
 const boobaPullFromWindow = -0.1;
+const boobaPullFromAcceleration = 1;
+
+let laSensor = null;
+
+navigator.permissions.query({ name: 'accelerometer' })
+.then(result => {
+  if (result.state === 'denied') {
+    console.log('Permission to use accelerometer sensor is denied.');
+    return;
+  }
+  laSensor = new LinearAccelerationSensor({frequency: 60});
+});
 
 function update() {
 	let body = document.getElementById("body");
@@ -48,14 +60,13 @@ function update() {
 	};
 	
 	boobaVelocity = {
-		x: boobaVelocity.x * boobaDragCoef + windowsVelocity.x * boobaPullFromWindow + (boobaTargetLocation.x - boobaCurrentLocation.x) * boobaPullPerPixel,
-		y: boobaVelocity.y * boobaDragCoef + windowsVelocity.y * boobaPullFromWindow + (boobaTargetLocation.y - boobaCurrentLocation.y) * boobaPullPerPixel
+		x: boobaVelocity.x * boobaDragCoef + windowsVelocity.x * boobaPullFromWindow + (boobaTargetLocation.x - boobaCurrentLocation.x) * boobaPullPerPixel + (laSensor?.x ?? 0 * boobaPullFromAcceleration),
+		y: boobaVelocity.y * boobaDragCoef + windowsVelocity.y * boobaPullFromWindow + (boobaTargetLocation.y - boobaCurrentLocation.y) * boobaPullPerPixel + (laSensor?.y ?? 0 * boobaPullFromAcceleration)
 	}
 	
 	body.style.left = (body.offsetLeft || bodyTargetLocation.x) + (bodyTargetLocation.x - body.offsetLeft) * 0.2 + "px";
 	body.style.top = (body.offsetTop || bodyTargetLocation.y) + (bodyTargetLocation.y - body.offsetTop) * 0.2 + "px";
-	// booba.style.left = (body.offsetLeft || bodyTargetLocation.x) + (bodyTargetLocation.x - body.offsetLeft) * 0.05 + "px";
-	// booba.style.top = (body.offsetTop || bodyTargetLocation.y) + (bodyTargetLocation.y - body.offsetTop) * 0.05 + "px";
+	
 	if(boobaTargetLocation.x == 0 && boobaTargetLocation.y == 0){// first frame
 		boobaCurrentLocation = boobaTargetLocation;
 		boobaVelocity.x = 0;
