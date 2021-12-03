@@ -15,14 +15,14 @@ const boobaPullFromAccelerationY = 0.5;
 let laSensor = null;
 
 navigator.permissions.query({ name: 'accelerometer' })
-.then(result => {
-  if (result.state === 'denied') {
-    console.log('Permission to use accelerometer sensor is denied.');
-    return;
-  }
-  laSensor = new LinearAccelerationSensor({frequency: 60});
-  laSensor.start();
-});
+	.then(result => {
+		if (result.state === 'denied') {
+			console.log('Permission to use accelerometer sensor is denied.');
+			return;
+		}
+		laSensor = new LinearAccelerationSensor({ frequency: 60 });
+		laSensor.start();
+	});
 
 function update() {
 	let body = document.getElementById("body");
@@ -38,7 +38,7 @@ function update() {
 	body.style.width = body.naturalWidth * scaling + "px";
 	booba.style.height = booba.naturalHeight * scaling + "px";
 	booba.style.width = booba.naturalWidth * scaling + "px";
-	
+
 	//calculate the window/phone movement
 	let nextWindowLocation = {
 		x: window.screenX,
@@ -50,9 +50,9 @@ function update() {
 		y: nextWindowLocation.y - currentWindowLocation.y
 	}
 	currentWindowLocation = nextWindowLocation;
-	
+
 	let phoneMovement;
-	if(laSensor?.activated){
+	if (laSensor?.activated) {
 		switch (screen.orientation.angle) {
 			case 0:
 				phoneMovement = {
@@ -86,27 +86,27 @@ function update() {
 				break;
 		}
 	} else {
-		phoneMovement = {x: 0, y: 0};
+		phoneMovement = { x: 0, y: 0 };
 	}
-	
+
 	//deal with the position stuff
 	bodyTargetLocation.x = (window.innerWidth - body.naturalWidth * scaling) / 2;
 	bodyTargetLocation.y = (window.innerHeight - body.naturalHeight * scaling) / 2;
-	
+
 	boobaTargetLocation = {
 		x: bodyTargetLocation.x + boobaTargetLocationOnBody.x * scaling,
-		y:bodyTargetLocation.y + boobaTargetLocationOnBody.y * scaling
+		y: bodyTargetLocation.y + boobaTargetLocationOnBody.y * scaling
 	};
-	
+
 	boobaVelocity = {
 		x: boobaVelocity.x * boobaDragCoef + windowsVelocity.x * boobaPullFromWindow + (boobaTargetLocation.x - boobaCurrentLocation.x) * boobaPullPerPixel + phoneMovement.x * boobaPullFromAccelerationX * scaling,
 		y: boobaVelocity.y * boobaDragCoef + windowsVelocity.y * boobaPullFromWindow + (boobaTargetLocation.y - boobaCurrentLocation.y) * boobaPullPerPixel + phoneMovement.y * boobaPullFromAccelerationY * scaling
 	}
-	
+
 	body.style.left = (body.offsetLeft || bodyTargetLocation.x) + (bodyTargetLocation.x - body.offsetLeft) * 0.2 + "px";
 	body.style.top = (body.offsetTop || bodyTargetLocation.y) + (bodyTargetLocation.y - body.offsetTop) * 0.2 + "px";
-	
-	if(boobaTargetLocation.x == 0 && boobaTargetLocation.y == 0){// first frame
+
+	if (boobaTargetLocation.x == 0 && boobaTargetLocation.y == 0) {// first frame
 		boobaCurrentLocation = boobaTargetLocation;
 		boobaVelocity.x = 0;
 		boobaVelocity.y = 0;
@@ -114,11 +114,26 @@ function update() {
 		boobaCurrentLocation.x += boobaVelocity.x;
 		boobaCurrentLocation.y += boobaVelocity.y;
 	}
-	
+
 	booba.style.left = boobaCurrentLocation.x + "px";
 	booba.style.top = boobaCurrentLocation.y + "px";
-
 }
+
+setTimeout(() => {
+	//Instructions
+	let instructionText = document.getElementById("instructionText");
+	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		instructionText.innerText = "Mobile mode detected, shake your phone/tablet around to trigger the totally accurate physics";
+	} else {
+		instructionText.innerText = "Desktop mode detected, move the window around your monitor(s) to trigger the totally accurate physics";
+	}
+	
+	let closeButton = document.getElementById("instructionClose");
+	closeButton.addEventListener("click", function() {
+		let instruction = document.getElementById("instruction");
+		instruction.remove();
+	  });
+});
 
 setTimeout(update);// Update after the page is loaded, but before the first frame. Removes the initial visual glitch
 setInterval(update, 1000 / 60); //60 fps

@@ -1,3 +1,40 @@
-img{
+img {
 	position: absolute;
+}
+
+body {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+
+#instruction {
+	background-color: lightblue;
+	display: flex;
+	padding: 1em;
+	border-radius: 1em;
+	z-index: 100;
+}
+
+#instructionText {
+	margin: auto;
+	padding-right: 1em;
+	font-size: 1.5em;
+}
+
+#instructionClose {
+	width: 2em;
+	height: 2em;
+	background-color: lightgray;
+	border-radius: 1em;
+	border-width: 1px;
+	border-color: darkgray;
+	outline: none;
+	border-style: solid;
+}
+
+#instructionClose:active {
+	background-color: darkgray;
+	border-color: lightgray;
 }
