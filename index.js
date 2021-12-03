@@ -9,7 +9,8 @@ var bodyToWindowSizeRatio = 0.8; //try to be 80% of the windows height or width,
 const boobaDragCoef = 0.90;
 const boobaPullPerPixel = 0.12;
 const boobaPullFromWindow = -0.1;
-const boobaPullFromAcceleration = 1;
+const boobaPullFromAccelerationX = 1.2;
+const boobaPullFromAccelerationY = 0.7;
 
 let laSensor = null;
 
@@ -61,8 +62,8 @@ function update() {
 	};
 	
 	boobaVelocity = {
-		x: boobaVelocity.x * boobaDragCoef + windowsVelocity.x * boobaPullFromWindow + (boobaTargetLocation.x - boobaCurrentLocation.x) * boobaPullPerPixel + (laSensor?.x ?? 0 * boobaPullFromAcceleration),
-		y: boobaVelocity.y * boobaDragCoef + windowsVelocity.y * boobaPullFromWindow + (boobaTargetLocation.y - boobaCurrentLocation.y) * boobaPullPerPixel + (laSensor?.y ?? 0 * boobaPullFromAcceleration)
+		x: boobaVelocity.x * boobaDragCoef + windowsVelocity.x * boobaPullFromWindow + (boobaTargetLocation.x - boobaCurrentLocation.x) * boobaPullPerPixel + (laSensor?.x ?? 0 * boobaPullFromAccelerationX),
+		y: boobaVelocity.y * boobaDragCoef + windowsVelocity.y * boobaPullFromWindow + (boobaTargetLocation.y - boobaCurrentLocation.y) * boobaPullPerPixel + (laSensor?.y ?? 0 * boobaPullFromAccelerationY)
 	}
 	
 	body.style.left = (body.offsetLeft || bodyTargetLocation.x) + (bodyTargetLocation.x - body.offsetLeft) * 0.2 + "px";
