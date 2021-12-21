@@ -1,5 +1,11 @@
-img {
+.anchor {
 	position: absolute;
+}
+
+.BodyContainer {
+	position: absolute;
+	width: 100vw;
+	height: 100vh;
 }
 
 body {

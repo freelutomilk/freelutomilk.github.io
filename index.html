@@ -1,17 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Boin Boin</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-  <script src="index.js"></script>
-  <div id="instruction">
-    <div id="instructionText"></div>
-    <button id="instructionClose">✖</button>
-  </div>
-	<img src="./LutoWithTransparentBackground.png" id="body"/>
-	<img src="./lutobooba.png" id="booba"/>
-  </body>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Boin Boin</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+	<script type="module" src="index.js"></script>
+	<select id="ModelSelect">
+		<option value="LutoModel">Luto</option>
+		<option value="RitaModel">Rita</option>
+	</select>
+	<div id="instruction">
+		<div id="instructionText"></div>
+		<button id="instructionClose">✖</button>
+	</div>
+	<div id="BodyContainer"></div>
+	<!-- <img src="./LutoWithTransparentBackground.png" id="body"/>
+	<img src="./lutobooba.png" id="booba"/> -->
+</body>
+
 </html>
